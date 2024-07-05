@@ -20,6 +20,7 @@
     ====================================================*/
     methods: function (e) {
       page.login();
+      page.table_users();
     },
 
     /*====================================================
@@ -29,46 +30,74 @@
     login: function (e) {
       const form = $("#loginForm");
 
-      //
       form.submit(function (e) {
         e.preventDefault();
 
-        //Accedemos  a los valores de los inputs del form
-        const email = $("#email").val();
-        const password = $("#password").val();
-        const rule = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-
-        //Validar si los campos estan vacios
-        if (email === "" || password === "") {
-          alert("Todos los campos son obligatorios");
-          return;
-        }
-
-        //Validar si el email es correcto
-        if (!rule.test(email)) {
-          alert("El email no es valido");
-          return;
-        }
-
-        // Ejecutar la peticion
-
-        $.ajax({
-          type: "POST",
-          url: `${page._base}auth/validate`,
-          data: form.serialize(),
-          dataType: "json",
-          success: function (resp) {
-            if (resp.status === 200) {
-              alert(resp.message);
-              window.location.href = "dashboard";
-            } else {
-              alert(resp.message);
-            }
+        //Validamos el formulario que los campos no esten vacios
+        form.validate({
+          rules: {
+            email: {
+              required: true,
+              email: true,
+            },
+            password: {
+              required: true,
+            },
           },
-          error: function (error) {
-            console.log(error);
+          messages: {
+            email: {
+              required: "El campo email es requerido",
+              email: "El campo email debe ser un correo valido",
+            },
+            password: {
+              required: "El campo contraseña es requerido",
+            },
+          },
+          submitHandler: function (form) {
+            const data = $(form).serialize();
+            $.ajax({
+              url: page._base + "auth/validate",
+              type: $(form).attr("method"),
+              data: data,
+              dataType: "json",
+              success: function (response) {
+                if (response.status !== 401) {
+                  Swal.fire({
+                    icon: "success",
+                    title: "Bienvenido",
+                    text: response.message,
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                      window.location.href = response.url;
+                    }
+                  });
+                  return;
+                }
+
+                Swal.fire({
+                  icon: "error",
+                  title: "Oops...",
+                  text: response.message,
+                });
+              },
+              error: function (response) {
+                Swal.fire({
+                  icon: "error",
+                  title: "Oops...",
+                  text: "Algo salió mal, intenta de nuevo",
+                });
+              },
+            });
           },
         });
+      });
+    },
+
+    //Curd Users
+
+    table_users: function (e) {
+      var table = $("#table_users").DataTable({
+        lengthChange: false,
       });
     },
   };
