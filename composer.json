@@ -1,0 +1,19 @@
+{
+    "name": "angel/helpdesk",
+    "description": "Sistema de Mesa de Ayuda",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Helpdesk\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Angel Calderon Mantilla",
+            "email": "angelitojpcmantilla24@gmail.com"
+        }
+    ],
+    "require": {
+        "vlucas/phpdotenv": "^5.6"
+    }
+}
