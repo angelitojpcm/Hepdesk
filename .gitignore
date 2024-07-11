@@ -1,0 +1,27 @@
+# Ignorar los directorios y archivos generados por Composer
+/vendor/
+composer.lock
+
+# Ignorar configuraciones específicas del entorno
+/.env
+/.env.local
+/.env.*.local
+
+# Ignorar directorios y archivos temporales de PHP y servidores web
+/.cache
+/.temp
+/.log
+/.logs
+
+# Ignorar configuraciones del IDE
+/.idea
+/.vscode
+/.phpstorm.meta.php
+
+# Ignorar archivos de depuración y de desarrollo
+/phpunit.xml
+/phpunit.xml.dist
+/.phpunit.result.cache
+
+# Ignorar otros archivos generados
+/public/build/
